@@ -84,64 +84,16 @@ namespace SuperAdventure
                 {
                     if(!playerAlreadyCompletedQuest)
                     {
-                        bool playerHasAllItemsToCompleteQuest = true;
-
-                        foreach(QuestCompletionItem qci in newLocation.QuestAvailableHere.QuestCompletionItems)
-                        {
-                            bool foundItemInPlayerInventory = false; 
-
-                            foreach(InventoryItem ii in _player.Inventory)
-                            {
-                                if(ii.Details.ID == qci.Details.ID)
-                                {
-                                    foundItemInPlayerInventory = true; 
-
-                                    if(ii.Quantity < qci.Quantity)
-                                    {
-                                        playerHasAllItemsToCompleteQuest = false;
-
-                                        break;
-                                    }
-
-                                    break;
-                                }
-                            }
-
-
-                            if (!foundItemInPlayerInventory)
-                            {
-                                playerHasAllItemsToCompleteQuest = false;
-
-                                break;
-                            }
-                        }
-
-
-
-
-
-
-
-
-
+                        /////
+                        bool playerHasAllItemsToCompleteQuest = _player.HasAllQuestCompletionItems(newLocation.QuestAvailableHere);
 
 
                         if (playerHasAllItemsToCompleteQuest)
                         {
                             rtbMessages.Text += Environment.NewLine;
                             rtbMessages.Text += "You complete the " + newLocation.QuestAvailableHere.Name + " quest." + Environment.NewLine;
-                              
-                            foreach(QuestCompletionItem qci in newLocation.QuestAvailableHere.QuestCompletionItems)
-                            {
-                                foreach(InventoryItem ii in _player.Inventory)
-                                {
-                                    if(ii.Details.ID == qci.Details.ID)
-                                    {
-                                        ii.Quantity -= qci.Quantity;
-                                        break;
-                                    }
-                                }
-                            }
+
+                            _player.RemoveQuestCompletionItems(newLocation.QuestAvailableHere);
 
                             rtbMessages.Text += "You receive: " + Environment.NewLine;
                             rtbMessages.Text += newLocation.QuestAvailableHere.RewardExperiencePoints.ToString() + " experience points" + Environment.NewLine;
@@ -152,23 +104,7 @@ namespace SuperAdventure
                             _player.ExperiencePoints += newLocation.QuestAvailableHere.RewardExperiencePoints;
                             _player.Gold += newLocation.QuestAvailableHere.RewardGold;
 
-                            bool addedItemToPlayerInventory = false;
-
-                            foreach (InventoryItem ii in _player.Inventory)
-                            {
-                                if (ii.Details.ID == newLocation.QuestAvailableHere.RewardItem.ID)
-                                {
-                                    ii.Quantity++;
-                                    addedItemToPlayerInventory = true;
-                                    break;
-                                }
-                            }
-
-
-                            if (!addedItemToPlayerInventory)
-                            {
-                                _player.Inventory.Add(new InventoryItem(newLocation.QuestAvailableHere.RewardItem, 1));
-                            }
+                            _player.AddItemToInventory(newLocation.QuestAvailableHere.RewardItem);
 
                             foreach (PlayerQuest pq in _player.Quests)
                             {

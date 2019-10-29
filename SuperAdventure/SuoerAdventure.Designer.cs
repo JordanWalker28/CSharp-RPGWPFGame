@@ -221,9 +221,12 @@
             // 
             // rtbMessages
             // 
+            this.rtbMessages.EnableAutoDragDrop = true;
             this.rtbMessages.Location = new System.Drawing.Point(347, 130);
             this.rtbMessages.Name = "rtbMessages";
             this.rtbMessages.ReadOnly = true;
+            this.rtbMessages.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.rtbMessages.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.rtbMessages.Size = new System.Drawing.Size(360, 286);
             this.rtbMessages.TabIndex = 18;
             this.rtbMessages.Text = "";
