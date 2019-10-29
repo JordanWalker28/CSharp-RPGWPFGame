@@ -24,5 +24,48 @@ namespace Engine
             Quests = new List<PlayerQuest>();
         }
 
+        public bool HasRequiredItemToEnterThisLocation(Location location)
+        {
+            if(location.ItemRequiredToEnter == null)
+            {
+                return true;
+            }
+
+            foreach(InventoryItem ii in Inventory)
+            {
+                if(ii.Details.ID == location.ItemRequiredToEnter.ID)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasThisQuest(Quest quest)
+        {
+            foreach (PlayerQuest playerQuest in Quests)
+            {
+                if (playerQuest.Details.ID == quest.ID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CompletedThisQuest(Quest quest)
+        {
+            foreach (PlayerQuest playerQuest in Quests)
+            {
+                if (playerQuest.Details.ID == quest.ID)
+                {
+                    return playerQuest.IsCompleted;
+                }
+            }
+            return false;
+        }
+
+
     }
 }

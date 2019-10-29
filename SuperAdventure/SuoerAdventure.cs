@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using Engine;
 
 namespace SuperAdventure
@@ -28,7 +29,6 @@ namespace SuperAdventure
             lblGold.Text = _player.Gold.ToString();
             lblExperience.Text = _player.ExperiencePoints.ToString();
             lblLevel.Text = _player.Level.ToString();
-
         }
 
         private void BtnNorth_Click(object sender, EventArgs e)
@@ -53,23 +53,10 @@ namespace SuperAdventure
 
         private void MoveTo(Location newLocation)
         {
-            if(newLocation.ItemRequiredToEnter != null)
+            if (!_player.HasRequiredItemToEnterThisLocation(newLocation))
             {
-                bool playerHasRequiredItem = false;
-
-                foreach (InventoryItem ii in _player.Inventory)
-                {
-                    if(ii.Details.ID == newLocation.ItemRequiredToEnter.ID)
-                    {
-                        playerHasRequiredItem = true;
-                        break;
-                    }
-                }
-                if(!playerHasRequiredItem)
-                {
-                    rtbMessages.Text += "You must have a " + newLocation.ItemRequiredToEnter.Name + " to enter this location. " + Environment.NewLine;
-                    return;
-                }
+                rtbMessages.Text += "You must have a " + newLocation.ItemRequiredToEnter.Name + " to enter this location." + Environment.NewLine;
+                return;
             }
 
             _player.CurrentLocation = newLocation;
@@ -86,26 +73,14 @@ namespace SuperAdventure
 
             lblHitPoints.Text = _player.CurrentHitPoints.ToString();
 
-
             if(newLocation.QuestAvailableHere != null)
             {
-                bool playerAlreadyHasQuest = false;
-                bool playerAlreadyCompletedQuest = false;
+                bool playerAlreadyHasQuest = _player.HasThisQuest(newLocation.QuestAvailableHere);
+                bool playerAlreadyCompletedQuest = _player.CompletedThisQuest(newLocation.QuestAvailableHere);
 
-                foreach(PlayerQuest playerQuest in _player.Quests)
-                {
-                    if(playerQuest.Details.ID == newLocation.QuestAvailableHere.ID)
-                    {
-                        playerAlreadyHasQuest = true;
 
-                        if(playerQuest.IsCompleted)
-                        {
-                            playerAlreadyCompletedQuest = true;
-                        }
-                    }
-                }
 
-                if(playerAlreadyHasQuest)
+                if (playerAlreadyHasQuest)
                 {
                     if(!playerAlreadyCompletedQuest)
                     {
@@ -140,6 +115,16 @@ namespace SuperAdventure
                                 break;
                             }
                         }
+
+
+
+
+
+
+
+
+
+
 
                         if (playerHasAllItemsToCompleteQuest)
                         {
@@ -220,6 +205,20 @@ namespace SuperAdventure
 
                 }
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             if (newLocation.MonsterLivingHere != null)
             {
