@@ -268,6 +268,8 @@ namespace SuperAdventure
         }
         private void BtnUseWeapon_Click(object sender, EventArgs e)
         {
+            Weapon currentweapon = (Weapon)cboWeapons.SelectedItem;
+
 
         }
 
